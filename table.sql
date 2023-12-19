@@ -1,6 +1,6 @@
 -- Table Auteur
 CREATE TABLE Auteur (
-    Num INT PRIMARY KEY,
+    Num INT PRIMARY KEY AUTO_INCREMENT,
     Nom VARCHAR(255),
     Prenom VARCHAR(255),
     DateNaissance DATE,
@@ -9,7 +9,7 @@ CREATE TABLE Auteur (
 
 -- Table Livre
 CREATE TABLE Livre (
-    ISSN INT PRIMARY KEY,
+    ISSN INT PRIMARY KEY AUTO_INCREMENT,
     Titre VARCHAR(255),
     Resume TEXT,
     Nbpages INT,
