@@ -25,9 +25,13 @@
                 if (array_key_exists("livre_cherche", $_POST)) {
                     $livre_cherche = $_POST["livre_cherche"];
                     $conn = mysqli_connect("localhost", "root", "", "projetweb");
-                    $requete = 'SELECT * FROM livre WHERE ';
+                    $requete = 'SELECT DISTINCT livre.* FROM livre
+                    INNER JOIN ecrit ON ecrit.Livre_ISSN = livre.ISSN
+                    INNER JOIN auteur ON auteur.Num = ecrit.Auteur_Num
+                    WHERE ';
                     foreach (explode(" ", $livre_cherche) as $terme) {
-                        $requete = $requete . ' Titre LIKE "%' . substr($terme, 0, 5) . '%"' . ' OR ';
+                        $requete = $requete . ' CONCAT(Titre, " ", Resume, " ", Domaine, " ", auteur.Nom, " ", auteur.Prenom)
+                        LIKE "%' . substr($terme, 0, 5) . '%" OR ';
                     };
                     $requete = substr($requete, 0, -4);
                     $res = mysqli_query($conn, $requete);
