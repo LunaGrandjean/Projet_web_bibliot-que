@@ -15,7 +15,7 @@
                     echo '<div class="recherche"><input type="text" name="livre_cherche" placeholder="Chercher un livre..." value="' . $_POST["livre_cherche"] . '"/><button type="submit">Chercher</button></div>';
                 }
                 else {
-                    echo '<div class="recherche"><input type="text" name="livre_cherche" placeholder="Chercher un livre..."/><input type="submit">Chercher</input></div>';
+                    echo '<div class="recherche"><input type="text" name="livre_cherche" placeholder="Chercher un livre..."/><button type="submit">Chercher</button></div>';
                 }
             ?>
             <br>
