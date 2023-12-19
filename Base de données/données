@@ -1,0 +1,32 @@
+-- Insert into Auteur table
+INSERT INTO Auteur (Nom, Prenom, DateNaissance, Nationalite)
+VALUES
+    ('Rowling', 'J.K.', '1965-07-31', 'British'),
+    ('Tolkien', 'J.R.R.', '1892-01-03', 'British'),
+    ('Martin', 'George R.R.', '1948-09-20', 'American'),
+    ('Atwood', 'Margaret', '1939-11-18', 'Canadian'),
+    ('King', 'Stephen', '1947-09-21', 'American');
+
+-- Insert into Livre table
+INSERT INTO Livre (Titre, Resume, Nbpages, Domaine)
+VALUES
+    ('Harry Potter and the Philosopher''s Stone', 'A young wizard''s journey at Hogwarts.', 332, 'Fantasy'),
+    ('The Lord of the Rings', 'Epic fantasy adventure in Middle-earth.', 1178, 'Fantasy'),
+    ('A Game of Thrones', 'Political intrigue in the Seven Kingdoms.', 694, 'Fantasy'),
+    ('The Handmaid''s Tale', 'Dystopian novel exploring gender roles.', 311, 'Dystopia'),
+    ('The Shining', 'Psychological horror in an isolated hotel.', 447, 'Horror');
+
+-- Insert into Ecrit table
+INSERT INTO Ecrit (Auteur_Num, Livre_ISSN)
+VALUES
+    (1, 1), -- J.K. Rowling wrote Harry Potter
+    (2, 2), -- J.R.R. Tolkien wrote The Lord of the Rings
+    (3, 3), -- George R.R. Martin wrote A Game of Thrones
+    (4, 4), -- Margaret Atwood wrote The Handmaid's Tale
+    (5, 5); -- Stephen King wrote The Shining
+
+-- Insert into Admin table
+INSERT INTO Admin (Nom, Prenom, Mail, Password, Tel)
+VALUES
+    ('Admin1', 'John', 'admin1@example.com', 'admin123', '123-456-7890'),
+    ('Admin2', 'Jane', 'admin2@example.com', 'admin456', '987-654-3210');
