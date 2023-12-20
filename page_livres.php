@@ -36,118 +36,133 @@
         </div>
     </nav>
     <div class="container mt-4">
-        <h2>Liste des livres</h2>
         
-        <?php
-            $host = 'localhost';
-            $db_name = 'projetweb';
-            $username = 'root';
-            $password = '';
+        <div id="recherche-livre">
+            <form action="page_livres.php" method="post">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Rechercher un livre..." name="search" aria-label="Rechercher un livre" aria-describedby="button-addon2" value="<?php echo isset($_POST['search']) ? htmlspecialchars($_POST['search']) : ''; ?>">
+                    <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Rechercher</button>
+                </div>
+            </form>
+            <br>
+            <br>
+            <h2>Liste des livres</h2> 
+            <div class='livres-container'> 
+                <?php
+                    $host = 'localhost';
+                    $db_name = 'projetweb';
+                    $username = 'root';
+                    $password = '';
 
-            try {
-                $dbh = new PDO("mysql:host=$host;dbname=$db_name;charset=utf8", $username, $password);
-                $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            } catch (PDOException $e) {
-                die('Échec de la connexion à la base de données : ' . $e->getMessage());
-            }
+                    try {
+                        $dbh = new PDO("mysql:host=$host;dbname=$db_name;charset=utf8", $username, $password);
+                        $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                    } catch (PDOException $e) {
+                        die('Échec de la connexion à la base de données : ' . $e->getMessage());
+                    }
 
-            // Traiter la suppression si un formulaire est soumis
-            if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ISSN'])) {
-                // Récupérer l'ISSN du livre à supprimer
-                $ISSN = $_POST['ISSN'];
+                    // Requête SQL de base
+                    $sql_select = "SELECT livre.ISSN, Titre, Resume, Nbpages, Domaine, GROUP_CONCAT(CONCAT(Nom, ' ', Prenom) SEPARATOR ', ') AS Auteurs
+                    FROM livre
+                    LEFT JOIN Ecrit ON livre.ISSN = Ecrit.Livre_ISSN
+                    LEFT JOIN Auteur ON Ecrit.Auteur_Num = Auteur.Num
+                    WHERE Titre LIKE :search
+                        OR Nbpages LIKE :search
+                        OR Domaine LIKE :search
+                        OR CONCAT(Nom, ' ', Prenom) LIKE :search
+                    GROUP BY livre.ISSN";
 
-                // Requête de suppression dans la table "livre"
-                $sql_delete = "DELETE FROM livre WHERE ISSN = :ISSN";
-                $stmt_delete = $dbh->prepare($sql_delete);
+                    // Si une recherche est effectuée
+                    if (isset($_POST['search'])) {
+                        $search = $_POST['search'];
+                        // Modifiez la requête pour inclure des conditions de recherche
+                        $sql_select = "SELECT livre.ISSN, Titre, Resume, Nbpages, Domaine, GROUP_CONCAT(CONCAT(Nom, ' ', Prenom) SEPARATOR ', ') AS Auteurs
+                            FROM livre
+                            LEFT JOIN Ecrit ON livre.ISSN = Ecrit.Livre_ISSN
+                            LEFT JOIN Auteur ON Ecrit.Auteur_Num = Auteur.Num
+                            WHERE Titre LIKE :search
+                                OR Nbpages LIKE :search
+                                OR Domaine LIKE :search
+                                OR CONCAT(Nom, ' ', Prenom) LIKE :search
+                            GROUP BY livre.ISSN";
+                    }
 
-                $stmt_delete->bindParam(':ISSN', $ISSN);
+                    $stmt_select = $dbh->prepare($sql_select);
 
-                try {
-                    $stmt_delete->execute();
-                    echo "Livre supprimé avec succès.";
-                } catch (PDOException $e) {
-                    echo "Erreur lors de la suppression du livre : " . $e->getMessage();
-                }
-            }
+                    echo "<form action='supprimer_livres.php' method='post'>";
+                    echo "<table class='table'>";
+                    echo "<thead>";
+                    echo "<tr>";
+                    echo "<th scope='col'>ISSN</th>";
+                    echo "<th scope='col'>Titre</th>";
+                    echo "<th scope='col'>Resume</th>";
+                    echo "<th scope='col'>Nbpages</th>";
+                    echo "<th scope='col'>Domaine</th>";
+                    echo "<th scope='col'>Auteur</th>";
+                    echo "<th scope='col'>Action</th>";
+                    echo "</tr>";
+                    echo "</thead>";
+                    echo "<tbody>";
 
-            // Afficher la liste des livres
-            $sql_select = "SELECT livre.ISSN, Titre, Resume, Nbpages, Domaine, GROUP_CONCAT(CONCAT(Nom, ' ', Prenom) SEPARATOR ', ') AS Auteurs
-                FROM livre
-                LEFT JOIN Ecrit ON livre.ISSN = Ecrit.Livre_ISSN
-                LEFT JOIN Auteur ON Ecrit.Auteur_Num = Auteur.Num
-                GROUP BY livre.ISSN";
+                    // Bind the parameter only once
+                    $search = '%' . $_POST['search'] . '%';
+                    $stmt_select->bindParam(':search', $search, PDO::PARAM_STR);
+                    $stmt_select->execute();
 
-            $stmt_select = $dbh->query($sql_select);
+                    while ($row = $stmt_select->fetch(PDO::FETCH_ASSOC)) {
+                        echo "<tr>";
+                        echo "<th scope='row'>{$row['ISSN']}</th>";
+                        echo "<td>{$row['Titre']}</td>";
+                        echo "<td>{$row['Resume']}</td>";
+                        echo "<td>{$row['Nbpages']} pages</td>";
+                        echo "<td>{$row['Domaine']}</td>";
+                        echo "<td>{$row['Auteurs']}</td>";
+                        echo "<td>
+                                <input type='hidden' name='ISSN' value='{$row['ISSN']}'>
+                                <button type='submit'>Supprimer</button>
+                            </td>";
+                        echo "</tr>";
+                    }
 
-            echo "<form action='supprimer_livres.php' method='post'>";
-            echo "<table class='table'>";
-            echo "<thead>";
-            echo "<tr>";
-            echo "<th scope='col'>ISSN</th>";
-            echo "<th scope='col'>Titre</th>";
-            echo "<th scope='col'>Resume</th>";
-            echo "<th scope='col'>Nbpages</th>";
-            echo "<th scope='col'>Domaine</th>";
-            echo "<th scope='col'>Auteur</th>";
-            echo "<th scope='col'>Action</th>";
-            echo "</tr>";
-            echo "</thead>";
-            echo "<tbody>";
+                    echo "</tbody>";
+                    echo "</table>";
+                    echo "</form>";
 
-            while ($row = $stmt_select->fetch(PDO::FETCH_ASSOC)) {
-                echo "<tr>";
-                echo "<th scope='row'>{$row['ISSN']}</th>";
-                echo "<td>{$row['Titre']}</td>";
-                echo "<td>{$row['Resume']}</td>";
-                echo "<td>{$row['Nbpages']} pages</td>";
-                echo "<td>{$row['Domaine']}</td>";
-                echo "<td>{$row['Auteurs']}</td>";
-                echo "<td>
-                        <input type='hidden' name='ISSN' value='{$row['ISSN']}'>
-                        <button type='submit'>Supprimer</button>
-                    </td>";
-                echo "</tr>";
-            }
-
-            echo "</tbody>";
-            echo "</table>";
-            echo "</form>";
-
-            $dbh = null;
-        ?>
-
-
-
-        <h2>Ajouter un livre</h2>
-        <form action="ajouter_livres.php" method="post">
-            <div class="mb-3">
-                <label for="ISSN" class="form-label">ISSN :</label>
-                <input type="text" class="form-control" id="ISSN" name="ISSN" required>
+                    $dbh = null;
+                ?>
             </div>
-            <div class="mb-3">
-                <label for="Titre" class="form-label">Titre :</label>
-                <input type="text" class="form-control" id="Titre" name="Titre" required>
-            </div>
-            <div class="mb-3">
-                <label for="Resume" class="form-label">Résumé :</label>
-                <textarea class="form-control" id="Resume" name="Resume" required></textarea>
-            </div>
-            <div class="mb-3">
-                <label for="Nbpages" class="form-label">Nombre de pages :</label>
-                <input type="number" class="form-control" id="Nbpages" name="Nbpages" required>
-            </div>
-            <div class="mb-3">
-                <label for="Domaine" class="form-label">Domaine :</label>
-                <input type="text" class="form-control" id="Domaine" name="Domaine" required>
-            </div>
-            <!-- <div class="mb-3">
-                <label for="Auteur" class="form-label">Auteur :</label>
-                <input type="text" class="form-control" id="Auteur" name="Auteur" required>
-                <p><strong>Attention l'auteur doit d'abord être ajouter dans la base de données</strong></p>
-            </div> -->
-            <button type="submit" class="btn btn-primary">Ajouter le livre</button>
-        </form>
 
+
+            <h2>Ajouter un livre</h2>
+            <form action="ajouter_livres.php" method="post">
+                <div class="mb-3">
+                    <label for="ISSN" class="form-label">ISSN :</label>
+                    <input type="text" class="form-control" id="ISSN" name="ISSN" required>
+                </div>
+                <div class="mb-3">
+                    <label for="Titre" class="form-label">Titre :</label>
+                    <input type="text" class="form-control" id="Titre" name="Titre" required>
+                </div>
+                <div class="mb-3">
+                    <label for="Resume" class="form-label">Résumé :</label>
+                    <textarea class="form-control" id="Resume" name="Resume" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="Nbpages" class="form-label">Nombre de pages :</label>
+                    <input type="number" class="form-control" id="Nbpages" name="Nbpages" required>
+                </div>
+                <div class="mb-3">
+                    <label for="Domaine" class="form-label">Domaine :</label>
+                    <input type="text" class="form-control" id="Domaine" name="Domaine" required>
+                </div>
+                <!-- <div class="mb-3">
+                    <label for="Auteur" class="form-label">Auteur :</label>
+                    <input type="text" class="form-control" id="Auteur" name="Auteur" required>
+                    <p><strong>Attention l'auteur doit d'abord être ajouter dans la base de données</strong></p>
+                </div> -->
+                <button type="submit" class="btn btn-primary">Ajouter le livre</button>
+            </form>
+        </div>
     </div>
 </body>
 </html>
