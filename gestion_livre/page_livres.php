@@ -157,7 +157,6 @@
                 </div>
                 <div class="mb-3">
                     <label for="Auteur" class="form-label">Auteur :</label>
-                        <select class="form-select" id="Auteur" name="Auteur" required>
                             <?php
                                 $host = 'localhost';
                                 $db_name = 'projetweb';
@@ -175,12 +174,14 @@
                                 $sqlAuteurs = "SELECT * FROM auteur";
                                 $stmtAuteurs = $dbh->query($sqlAuteurs);
 
-                                // Affichage des options du menu déroulant
+                                // Affichage des cases à cocher pour chaque auteur
                                 while ($auteur = $stmtAuteurs->fetch(PDO::FETCH_ASSOC)) {
-                                    echo "<option value='{$auteur['Num']}'>{$auteur['Nom']} {$auteur['Prenom']}</option>";
+                                    echo "<div class='form-check'>";
+                                    echo "<input class='form-check-input' type='checkbox' name='Auteurs[]' value='{$auteur['Num']}' id='auteur{$auteur['Num']}'>";
+                                    echo "<label class='form-check-label' for='auteur{$auteur['Num']}'>{$auteur['Nom']} {$auteur['Prenom']}</label>";
+                                    echo "</div>";
                                 }
                             ?>
-                        </select>
                         <br>
                 </div>
                 
