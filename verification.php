@@ -18,14 +18,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('Location: page_admin.php');
         exit();
     } else {
-        $error_message = 'Identifiants incorrects';
+        $_SESSION['error_message'] = 'Identifiants incorrects';
+        header('Location: connexion_admin.php');
+        exit();
     }
 }
 ?>
- <?php
- if(isset($_GET['erreur'])){
- $err = $_GET['erreur'];
- if($err==1 || $err==2)
- echo "<p style='color:red'>Utilisateur ou mot de passe incorrect</p>";
- }
- ?>
