@@ -14,20 +14,12 @@ body{
     background: #fff;
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
    }
+
    #container h1{
     width: 38%;
     margin: 0 auto;
     padding-bottom: 10px;
    }
-   
-   table, td, th {
-    border: 1px solid;
-  }
-  
-  table {
-    width: 80%;
-    border-collapse: collapse;
-  }
 
 
 
@@ -141,4 +133,12 @@ body{
 /* When moving the mouse over the close button */
 .closebtn:hover {
   color: black;
+}
+
+#afficher_filtres:hover {
+  cursor: pointer;
+}
+
+.invisible {
+  visibility: hidden;
 }
