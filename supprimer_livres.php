@@ -15,16 +15,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ISSN'])) {
     // Récupérer l'ISSN du livre à supprimer
     $ISSN = $_POST['ISSN'];
 
-    // Requête de suppression dans la table "livre"
-    $sql_delete = "DELETE FROM livre WHERE ISSN = :ISSN";
-    $stmt_delete = $dbh->prepare($sql_delete);
-
-    $stmt_delete->bindParam(':ISSN', $ISSN);
+    // Début de la transaction
+    $dbh->beginTransaction();
 
     try {
-        $stmt_delete->execute();
+        // Requête de suppression dans la table "Ecrit"
+        $sql_delete_ecrit = "DELETE FROM Ecrit WHERE Livre_ISSN = :ISSN";
+        $stmt_delete_ecrit = $dbh->prepare($sql_delete_ecrit);
+        $stmt_delete_ecrit->bindParam(':ISSN', $ISSN);
+        $stmt_delete_ecrit->execute();
+
+        // Requête de suppression dans la table "livre"
+        $sql_delete_livre = "DELETE FROM livre WHERE ISSN = :ISSN";
+        $stmt_delete_livre = $dbh->prepare($sql_delete_livre);
+        $stmt_delete_livre->bindParam(':ISSN', $ISSN);
+        $stmt_delete_livre->execute();
+
+        // Commit de la transaction si tout s'est bien déroulé
+        $dbh->commit();
+
         echo "Livre supprimé avec succès.";
     } catch (PDOException $e) {
+        // Rollback en cas d'erreur
+        $dbh->rollBack();
         echo "Erreur lors de la suppression du livre : " . $e->getMessage();
     }
 }
