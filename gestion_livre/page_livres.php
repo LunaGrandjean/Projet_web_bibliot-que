@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="styles.css" media="screen" type="text/css" />
+    <link rel="stylesheet" href="../styles.css" media="screen" type="text/css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
@@ -155,11 +155,35 @@
                     <label for="Domaine" class="form-label">Domaine :</label>
                     <input type="text" class="form-control" id="Domaine" name="Domaine" required>
                 </div>
-                <!-- <div class="mb-3">
+                <div class="mb-3">
                     <label for="Auteur" class="form-label">Auteur :</label>
-                    <input type="text" class="form-control" id="Auteur" name="Auteur" required>
-                    <p><strong>Attention l'auteur doit d'abord être ajouter dans la base de données</strong></p>
-                </div> -->
+                        <select class="form-select" id="Auteur" name="Auteur" required>
+                            <?php
+                                $host = 'localhost';
+                                $db_name = 'projetweb';
+                                $username = 'root';
+                                $password = '';
+                        
+                                try {
+                                    $dbh = new PDO("mysql:host=$host;dbname=$db_name;charset=utf8", $username, $password);
+                                    $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                                } catch (PDOException $e) {
+                                    die('Échec de la connexion à la base de données : ' . $e->getMessage());
+                                }
+                        
+                                // Récupération des auteurs depuis la base de données
+                                $sqlAuteurs = "SELECT * FROM auteur";
+                                $stmtAuteurs = $dbh->query($sqlAuteurs);
+
+                                // Affichage des options du menu déroulant
+                                while ($auteur = $stmtAuteurs->fetch(PDO::FETCH_ASSOC)) {
+                                    echo "<option value='{$auteur['Num']}'>{$auteur['Nom']} {$auteur['Prenom']}</option>";
+                                }
+                            ?>
+                        </select>
+                        <br>
+                </div>
+                
                 <button type="submit" class="btn btn-primary">Ajouter le livre</button>
             </form>
         </div>
