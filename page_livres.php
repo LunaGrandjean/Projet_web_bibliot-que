@@ -89,10 +89,15 @@
                 die('Échec de la connexion à la base de données : ' . $e->getMessage());
             }
 
-            // Afficher la liste des livres
-            $sql_select = "SELECT * FROM livre";
+            // Afficher la liste des livres avec les auteurs
+            $sql_select = "SELECT livre.ISSN, Titre, Resume, Nbpages, Domaine, GROUP_CONCAT(CONCAT(Nom, ' ', Prenom) SEPARATOR ', ') AS Auteurs
+                FROM livre
+                LEFT JOIN Ecrit ON livre.ISSN = Ecrit.Livre_ISSN
+                LEFT JOIN Auteur ON Ecrit.Auteur_Num = Auteur.Num
+                GROUP BY livre.ISSN";
+
             $stmt_select = $dbh->query($sql_select);
-            
+
             echo "<table class='table'>";
             echo "<thead>";
             echo "<tr>";
@@ -101,7 +106,7 @@
             echo "<th scope='col'>Resume</th>";
             echo "<th scope='col'>Nbpages</th>";
             echo "<th scope='col'>Domaine</th>";
-            echo "<th scope='col'>Auteur</th>";
+            echo "<th scope='col'>Auteur(s)</th>";
             echo "<th scope='col'> </th>";
             echo "</tr>";
             echo "</thead>";
@@ -113,7 +118,7 @@
                 echo "<td>{$row['Resume']}</td>";
                 echo "<td>{$row['Nbpages']} pages</td>";
                 echo "<td>{$row['Domaine']}</td>";
-                echo "<td> </td>";
+                echo "<td>{$row['Auteurs']}</td>";
                 echo "<td><a href='supprimer_livre.php?id={$row['ISSN']}'>Supprimer</a></td>";
                 echo "</tr>";
             }
