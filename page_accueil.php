@@ -6,6 +6,7 @@
             Test
         </title>
         <link rel="stylesheet" href="style.css"/>
+        <script type="text/javascript" src="page_accueil.js"></script>
     </head>
     <body>
         <div id="recherche_livre">
@@ -66,7 +67,11 @@
                 <input type="checkbox" name="chercher_par_auteur"' . $auteur_checked . '>
                 <span class="slider"></span>
                 </label>
-                <label for="chercher_par_auteur">Auteur</label>'
+                <label for="chercher_par_auteur">Auteur</label>';
+                echo '<div id="conteneur_filtres">
+                <span id="afficher_filtres" onclick="afficher_filtres();">&#9654; Filtres</span>
+                <div id="filtres"></div>
+                </div>';
             ?>
             <br>
             <br>
