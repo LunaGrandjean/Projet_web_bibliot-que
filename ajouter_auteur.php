@@ -76,27 +76,56 @@
   </div>
 </div>
 
+<?php
+$host = 'localhost';
+$db_name = 'projet_web';
+$username = 'root';
+$password = '';
 
-<h2>Ajouter un auteur</h2>
-    <form action="ajouter_auteur.php" method="post">
-        <div class="mb-3">
-            <label for="Nom" class="form-label">Nom :</label>
-            <input type="text" class="form-control" id="Nom" name="Nom" required>
-        </div>
-        <div class="mb-3">
-            <label for="Prenom" class="form-label">Prénom :</label>
-            <input type="text" class="form-control" id="Prenom" name="Prenom" required>
-        </div>
-        <div class="mb-3">
-            <label for="DateNaissance" class="form-label">Date de naissance :</label>
-            <input type="date" class="form-control" id="DateNaissance" name="DateNaissance" required>
-        </div>
-        <div class="mb-3">
-            <label for="Nationalite" class="form-label">Nationalité :</label>
-            <input type="text" class="form-control" id="Nationalite" name="Nationalite" required>
-        </div>
-        <button type="submit" class="btn btn-primary">Ajouter l'auteur</button>
-        
-    </form>
-</body>
-</html>
+try {
+    $dbh = new PDO("mysql:host=$host;dbname=$db_name;charset=utf8", $username, $password);
+    $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die('Échec de la connexion à la base de données : ' . $e->getMessage());
+}
+
+// Vérifier si le formulaire a été soumis
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Récupération des données du formulaire
+    $Nom = $_POST['Nom'];
+    $prenom = $_POST['Prenom'];
+    $datenaissance = $_POST['DateNaissance'];
+    $nationalite = $_POST['Nationalite'];
+
+    // Vérifier si l'auteur existe déjà
+    $checkQuery = "SELECT * FROM auteur WHERE Nom = :Nom AND Prenom = :Prenom AND DateNaissance = :DateNaissance";
+    $checkStmt = $dbh->prepare($checkQuery);
+    $checkStmt->bindParam(':Nom', $Nom);
+    $checkStmt->bindParam(':Prenom', $prenom);
+    $checkStmt->bindParam(':DateNaissance', $datenaissance);
+    $checkStmt->execute();
+
+    if ($checkStmt->fetch(PDO::FETCH_ASSOC)) {
+        echo '<script>alert("Auteur déjà existant");</script>';
+    } else {
+        // Requête d'insertion dans la table "auteur" avec PDO
+        $sql = "INSERT INTO auteur (Nom, Prenom, DateNaissance, Nationalite) VALUES (:Nom, :Prenom, :DateNaissance, :Nationalite)";
+        $stmt = $dbh->prepare($sql);
+
+        $stmt->bindParam(':Nom', $Nom);
+        $stmt->bindParam(':Prenom', $prenom);
+        $stmt->bindParam(':DateNaissance', $datenaissance);
+        $stmt->bindParam(':Nationalite', $nationalite);
+
+        try {
+            $stmt->execute();
+            echo '<script>alert("Auteur ajouté avec succès");</script>';
+        } catch (PDOException $e) {
+            echo '<script>alert("Erreur lors de l\'ajout de l\'auteur : ' . $e->getMessage() . '");</script>';
+        }
+    }
+}
+
+// Fermeture de la connexion à la base de données
+$dbh = null;
+?>
