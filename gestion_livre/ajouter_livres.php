@@ -19,6 +19,8 @@
             $resume = $_POST['Resume'];
             $nb_pages = $_POST['Nbpages'];
             $domaine = $_POST['Domaine'];
+            $idAuteur = $_POST['Auteur'];
+            
 
             // Requête d'insertion dans la table "livre" avec PDO
             $sql = "INSERT INTO livre (ISSN, Titre, Resume, Nbpages, Domaine) VALUES (:ISSN, :Titre, :Resume, :Nbpages, :Domaine)";
@@ -30,14 +32,20 @@
             $stmt->bindParam(':Nbpages', $nb_pages);
             $stmt->bindParam(':Domaine', $domaine);
 
+            // Requête d'insertion dans la table "écrit" pour associer le livre à l'auteur
+            $sqlEcrit = "INSERT INTO ecrit (ISSN, NumAuteur) VALUES (:ISSN, :NumAuteur)";
+            $stmtEcrit = $dbh->prepare($sqlEcrit);
+            $stmtEcrit->bindParam(':ISSN', $ISSN);
+            $stmtEcrit->bindParam(':NumAuteur', $idAuteur);
+
             try {
                 $stmt->execute();
                 echo "Livre ajouté avec succès.";
             } catch (PDOException $e) {
                 echo "Erreur lors de l'ajout du livre : " . $e->getMessage();
             }
-        }
 
+        }
         // Fermeture de la connexion à la base de données
         header("Location: page_livres.php");
         $dbh = null;
