@@ -33,7 +33,6 @@
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
           <a class="nav-link" href="#" data-bs-toggle="offcanvas" data-bs-target="#profileMenu" aria-controls="profileMenu">
-            <!-- Utilisez l'icône SVG ici -->
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
               <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
               <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
@@ -45,58 +44,58 @@
   </div>
 </nav>
 
-<!-- Barre latérale (offcanvas) -->
-<div class="offcanvas offcanvas-end" tabindex="-1" id="profileMenu" aria-labelledby="profileMenuLabel">
-  <div class="offcanvas-header">
-    <h5 class="offcanvas-title" id="profileMenuLabel">Menu Profil</h5>
-    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-  </div>
-  <div class="offcanvas-body">
-    <ul class="list-group">
-    <li class="list-group-item">
-  <a href="settings.php" class="text-decoration-none">
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear-fill" viewBox="0 0 16 16">
-      <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"/>
-    </svg>
-    Paramètres
-  </a>
-</li>
+<div class="container mt-4">
+  <h2>Liste des auteurs</h2>
 
-<li class="list-group-item">
-  <a href="deconnexion.php" class="text-decoration-none">
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
-      <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"/>
-      <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
-    </svg>
-    Déconnexion
-  </a>
-</li>
+  <?php
+  // Connexion à la base de données
+  $host = 'localhost';
+  $db_name = 'projet_web';
+  $username = 'root';
+  $password = '';
 
-    </ul>
-  </div>
+  try {
+    $dbh = new PDO("mysql:host=$host;dbname=$db_name;charset=utf8", $username, $password);
+    $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+  } catch (PDOException $e) {
+    die('Échec de la connexion à la base de données : ' . $e->getMessage());
+  }
+
+  // Afficher la liste des auteurs
+  $sql_select = "SELECT * FROM auteur";
+  $stmt_select = $dbh->query($sql_select);
+
+  echo "<ul>";
+  while ($row = $stmt_select->fetch(PDO::FETCH_ASSOC)) {
+    echo "<li>{$row['Nom']} - {$row['Prenom']} - {$row['DateNaissance']} - {$row['Nationalite']} ";
+    echo "<a href='supprimer_auteur.php?Num={$row['Num']}' class='btn btn-link btn-sm' onclick='return confirm(\"Êtes-vous sûr de vouloir supprimer cet auteur ?\")'>Supprimer</a></li>";
+  }
+  echo "</ul>";
+  ?>
 </div>
 
-
-<h2>Ajouter un auteur</h2>
+<div class="container mt-4">
+    <h2>Ajouter un auteur</h2>
     <form action="ajouter_auteur.php" method="post">
         <div class="mb-3">
             <label for="Nom" class="form-label">Nom :</label>
-            <input type="text" class="form-control" id="Nom" name="Nom" required>
+            <input type="text" class="form-control" name="Nom" required>
         </div>
         <div class="mb-3">
             <label for="Prenom" class="form-label">Prénom :</label>
-            <input type="text" class="form-control" id="Prenom" name="Prenom" required>
+            <input type="text" class="form-control" name="Prenom" required>
         </div>
         <div class="mb-3">
             <label for="DateNaissance" class="form-label">Date de naissance :</label>
-            <input type="date" class="form-control" id="DateNaissance" name="DateNaissance" required>
+            <input type="date" class="form-control" name="DateNaissance" required>
         </div>
         <div class="mb-3">
             <label for="Nationalite" class="form-label">Nationalité :</label>
-            <input type="text" class="form-control" id="Nationalite" name="Nationalite" required>
+            <input type="text" class="form-control" name="Nationalite" required>
         </div>
         <button type="submit" class="btn btn-primary">Ajouter l'auteur</button>
-        
     </form>
+</div>
+
 </body>
 </html>
