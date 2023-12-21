@@ -11,23 +11,6 @@
     <script type="text/javascript" src="page_accueil.js"></script>
 </head>
 <body>
-    <span id="domaines_livres" class="invisible"><?php
-        $host = 'localhost';
-        $db_name = 'projetweb';
-        $username = 'root';
-        $password = '';
-
-        try {
-            $dbh = new PDO("mysql:host=$host;dbname=$db_name;charset=utf8", $username, $password);
-            $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch (PDOException $e) {
-        }
-        $stmt_select = $dbh->prepare("SELECT DISTINCT Domaine FROM livre");
-        $stmt_select->execute();
-        while ($row = $stmt_select->fetch(PDO::FETCH_ASSOC)) {
-            echo "{$row['Domaine']};";
-            }
-        ?></span>
     <div id="recherche_livre">
         <form action="page_accueil.php" method="post">
             <?php
@@ -113,8 +96,8 @@
                 $search = $_POST["search"];
                 $sql_select = "SELECT ISSN, Titre, Resume, Nbpages, Domaine, GROUP_CONCAT(CONCAT(Nom, ' ', Prenom) SEPARATOR ', ') AS Auteurs
                 FROM livre
-                LEFT JOIN Ecrit ON livre.ISSN = Ecrit.Livre_ISSN
-                LEFT JOIN Auteur ON Ecrit.Auteur_Num = Auteur.Num
+                LEFT JOIN ecrit ON livre.ISSN = ecrit.Livre_ISSN
+                LEFT JOIN auteur ON ecrit.Auteur_Num = auteur.Num
                 WHERE ";
                 $chercher_par = '';
                 if ($chercher_par_titre) {
@@ -136,14 +119,24 @@
                     </div>';
                 }
                 else {
+                    //La fonction non_vide servira à filtrer les termes de la recherche,
+                    //pour exclure ceux qui sont vides
+                    function non_vide($chaine) {
+                        return $chaine!="";
+                    };
                     //Il devrait y avoir une virgule à la fin de $chercher_par, donc on la retire
                     $chercher_par = substr($chercher_par, 0, -1);
                     $condition_selection = '';
-                    foreach (explode(" ", $search) as $terme) {
+                    foreach (array_filter(explode(" ", $search), "non_vide") as $terme) {
                         $condition_selection = $condition_selection . ' CONCAT('. $chercher_par .')
                         LIKE "%' . substr($terme, 0, 5) . '%" OR ';
                     };
                     $condition_selection = "(" . substr($condition_selection, 0, -4) . ")";
+                    //Si l'on n'a aucun terme de recherche, alors on met "TRUE" comme condition
+                    //pour des questions de syntaxe.
+                    if ($condition_selection=="()") {
+                        $condition_selection = "TRUE";
+                    };
                     if (array_key_exists("titre_contient", $_POST)) {
                         $condition_selection = $condition_selection . ' AND (Titre LIKE "%' . $_POST["titre_contient"] . '%")';
                         if ($_POST["titre_contient_pas"]!="") {
@@ -163,7 +156,7 @@
                     }
                     $sql_select = $sql_select . $condition_selection . " GROUP BY ISSN";
                 }
-                
+            
             $stmt_select = $dbh->prepare($sql_select);
 
             echo "<form action='supprimer_livres.php' method='post'>

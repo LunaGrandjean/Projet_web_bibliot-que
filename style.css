@@ -138,7 +138,3 @@ body{
 #afficher_filtres:hover {
   cursor: pointer;
 }
-
-.invisible {
-  visibility: hidden;
-}
