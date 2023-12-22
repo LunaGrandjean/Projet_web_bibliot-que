@@ -136,3 +136,13 @@
 #afficher_filtres:hover {
   cursor: pointer;
 }
+
+#lien_connexion {
+  float: right;
+  margin: 2%;
+}
+
+#recherche_livre {
+  width: 85%;
+  float : left;
+}
