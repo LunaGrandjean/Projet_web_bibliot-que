@@ -1,6 +1,6 @@
 <?php
 $host = 'localhost';
-$db_name = 'projet_web';
+$db_name = 'projetweb';
 $username = 'root';
 $password = '';
 

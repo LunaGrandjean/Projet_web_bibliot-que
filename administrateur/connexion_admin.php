@@ -8,12 +8,12 @@ if(isset($_SESSION['error_message'])){
 <html>
 <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="styles.css" media="screen" type="text/css" />
+    <link rel="stylesheet" href="../styles.css" media="screen" type="text/css" />
 </head>
 <body>
     <div id="container">
 
-        <form action="verification.php" method="POST">
+        <form action="http://localhost/Projet_web_bibliotheque/verification.php" method="POST">
             <h1>Connexion</h1>
 
             <?php if(isset($error_message)): ?>
