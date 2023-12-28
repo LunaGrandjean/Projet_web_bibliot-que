@@ -78,17 +78,7 @@
         <br>
         <div id="resultats_livres">
         <?php
-            $host = 'localhost';
-            $db_name = 'projetweb';
-            $username = 'root';
-            $password = '';
-
-            try {
-                $dbh = new PDO("mysql:host=$host;dbname=$db_name;charset=utf8", $username, $password);
-                $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            } catch (PDOException $e) {
-                die('Echec de la connexion à la base de données : ' . $e->getMessage());
-            }
+            include("../db.php");
 
             // Requête SQL de base
 
@@ -157,7 +147,7 @@
                     $sql_select = $sql_select . $condition_selection . " GROUP BY ISSN";
                 }
             
-            $stmt_select = $dbh->prepare($sql_select);
+            $stmt_select = $pdo->prepare($sql_select);
 
             echo "<table class='table'>
             <thead>
