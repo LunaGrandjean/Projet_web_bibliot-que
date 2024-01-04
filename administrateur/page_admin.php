@@ -26,7 +26,7 @@
           <a class="nav-link active" aria-current="page" href="#"></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="page_auteur.php">Auteur</a>
+          <a class="nav-link" href="http://localhost/Projet_web_bibliotheque/gestion_auteur/page_auteur.php">Auteur</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="page_livres.php">Livre</a>
