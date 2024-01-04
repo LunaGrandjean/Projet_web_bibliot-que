@@ -1,5 +1,5 @@
 <?php
-include('db.php');
+include('../db.php');
 session_start();
 if (isset($_SESSION['error_message'])) {
     $error_message = $_SESSION['error_message'];
@@ -11,7 +11,7 @@ if (isset($_SESSION['error_message'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css" media="screen" type="text/css" />
+    <link rel="stylesheet" href="../styles.css" media="screen" type="text/css" />
     <title>Connexion</title>
 </head>
 <body>

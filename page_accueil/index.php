@@ -47,138 +47,126 @@
                 if ($chercher_par_auteur) {
                     $auteur_checked = 'checked="checked"';
                 }
-                echo '<br><br>
-                Chercher par :
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <label class="switch">
-                <input type="checkbox" name="chercher_par_titre"' . $titre_checked .'>
-                <span class="slider"></span>
-                </label>
-                <label for="chercher_par_titre">Titre</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <label class="switch">
-                <input type="checkbox" name="chercher_par_resume"' . $resume_checked . '>
-                <span class="slider"></span>
-                </label>
-                <label for="chercher_par_resume">Résumé</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <label class="switch">
-                <input type="checkbox"  name="chercher_par_domaine"' . $domaine_checked . '>
-                <span class="slider"></span>
-                </label>
-                <label for="chercher_par_domaine">Domaine</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <label class="switch">
-                <input type="checkbox" name="chercher_par_auteur"' . $auteur_checked . '>
-                <span class="slider"></span>
-                </label>
-                <label for="chercher_par_auteur">Auteur</label>
-                <div id="conteneur_filtres">
-                <span id="afficher_filtres" onclick="afficher_filtres();">&#9654; Filtres</span>
-                <div id="filtres"></div>
-                </div>';
+            
             ?>
         <br>
+        <br>
         <div id="resultats_livres">
-        <?php
-            include("../db.php");
+            <div class="row justify-content-center">
+                <?php
+                    include("../db.php");
 
-            // Requête SQL de base
+                    // Requête SQL de base
 
-            if (array_key_exists("search", $_POST)) {
-                $search = $_POST["search"];
-                $sql_select = "SELECT ISSN, Titre, Resume, Nbpages, Domaine, GROUP_CONCAT(CONCAT(Nom, ' ', Prenom) SEPARATOR ', ') AS Auteurs
-                FROM livre
-                LEFT JOIN ecrit ON livre.ISSN = ecrit.Livre_ISSN
-                LEFT JOIN auteur ON ecrit.Auteur_Num = auteur.Num
-                WHERE ";
-                $chercher_par = '';
-                if ($chercher_par_titre) {
-                    $chercher_par = $chercher_par . 'Titre, " ",';
-                }
-                if ($chercher_par_resume) {
-                    $chercher_par = $chercher_par . 'Resume, " ",';
-                }
-                if ($chercher_par_domaine) {
-                    $chercher_par = $chercher_par . 'Domaine, " ",';
-                }
-                if ($chercher_par_auteur) {
-                    $chercher_par = $chercher_par . 'auteur.Nom, " ", auteur.Prenom,';
-                }
-                if ($chercher_par=="") {
-                    echo '<div class="alert">
-                    <span class="closebtn" onclick="this.parentElement.style.display=' . "'none'" . ';">&times;</span>
-                    Il faut chercher au moins par titre, résumé, domaine ou auteur.
+                    if (array_key_exists("search", $_POST)) {
+                        $search = $_POST["search"];
+                        $sql_select = "SELECT ISSN, Titre, Resume, Nbpages, Domaine, GROUP_CONCAT(CONCAT(Nom, ' ', Prenom) SEPARATOR ', ') AS Auteurs
+                        FROM livre
+                        LEFT JOIN ecrit ON livre.ISSN = ecrit.Livre_ISSN
+                        LEFT JOIN auteur ON ecrit.Auteur_Num = auteur.Num
+                        WHERE ";
+                        $chercher_par = '';
+                        if ($chercher_par_titre) {
+                            $chercher_par = $chercher_par . 'Titre, " ",';
+                        }
+                        if ($chercher_par_resume) {
+                            $chercher_par = $chercher_par . 'Resume, " ",';
+                        }
+                        if ($chercher_par_domaine) {
+                            $chercher_par = $chercher_par . 'Domaine, " ",';
+                        }
+                        if ($chercher_par_auteur) {
+                            $chercher_par = $chercher_par . 'auteur.Nom, " ", auteur.Prenom,';
+                        }
+                        if ($chercher_par=="") {
+                            echo '<div class="alert">
+                            <span class="closebtn" onclick="this.parentElement.style.display=' . "'none'" . ';">&times;</span>
+                            Il faut chercher au moins par titre, résumé, domaine ou auteur.
+                            </div>';
+                        }
+                        else {
+                            //La fonction non_vide servira à filtrer les termes de la recherche,
+                            //pour exclure ceux qui sont vides
+                            function non_vide($chaine) {
+                                return $chaine!="";
+                            };
+                            //Il devrait y avoir une virgule à la fin de $chercher_par, donc on la retire
+                            $chercher_par = substr($chercher_par, 0, -1);
+                            $condition_selection = '';
+                            foreach (array_filter(explode(" ", $search), "non_vide") as $terme) {
+                                $condition_selection = $condition_selection . ' CONCAT('. $chercher_par .')
+                                LIKE "%' . substr($terme, 0, 5) . '%" OR ';
+                            };
+                            $condition_selection = "(" . substr($condition_selection, 0, -4) . ")";
+                            //Si l'on n'a aucun terme de recherche, alors on met "TRUE" comme condition
+                            //pour des questions de syntaxe.
+                            if ($condition_selection=="()") {
+                                $condition_selection = "TRUE";
+                            };
+                            if (array_key_exists("titre_contient", $_POST)) {
+                                $condition_selection = $condition_selection . ' AND (Titre LIKE "%' . $_POST["titre_contient"] . '%")';
+                                if ($_POST["titre_contient_pas"]!="") {
+                                    $condition_selection = $condition_selection . ' AND (NOT Titre LIKE "%' . $_POST["titre_contient_pas"] . '%")';
+                                }
+                                $condition_selection = $condition_selection . ' AND (Resume LIKE "%' . $_POST["resume_contient"] . '%")';
+                                if ($_POST["resume_contient_pas"]!="") {
+                                    $condition_selection = $condition_selection . ' AND (NOT Resume LIKE "%' . $_POST["resume_contient_pas"] . '%")';
+                                }
+                                if (is_numeric($_POST["nb_pages"])) {
+                                    $condition_selection = $condition_selection . ' AND (Nbpages ' . $_POST["nb_pages_operateur"] . $_POST["nb_pages"] . ")";
+                                }
+                                if ($_POST["domaine"]!="Quelconque") {
+                                    $condition_selection = $condition_selection . ' AND (Domaine = "' . $_POST["domaine"] . '")';
+                                }
+                                echo "<script type='text/javascript'>afficher_filtres('" . $_POST["titre_contient"] . "', '" . $_POST["titre_contient_pas"] . "', '" . $_POST["resume_contient"] . "', '" . $_POST["resume_contient_pas"] . "', '" . $_POST["nb_pages_operateur"] . "', '" . $_POST["nb_pages"] . "', '" . $_POST["domaine"] . "');</script>";
+                            }
+                            $sql_select = $sql_select . $condition_selection . " GROUP BY ISSN";
+                        }
+                    
+                    $stmt_select = $pdo->prepare($sql_select);
+
+                    echo '<br><br>
+                    <div class="col-md-4">
+                    Chercher par :
+                    <div id="conteneur_filtres">
+                    <span id="afficher_filtres" onclick="afficher_filtres();">&#9654; Filtres</span>
+                    <div id="filtres"></div>
+                    </div>
                     </div>';
-                }
-                else {
-                    //La fonction non_vide servira à filtrer les termes de la recherche,
-                    //pour exclure ceux qui sont vides
-                    function non_vide($chaine) {
-                        return $chaine!="";
-                    };
-                    //Il devrait y avoir une virgule à la fin de $chercher_par, donc on la retire
-                    $chercher_par = substr($chercher_par, 0, -1);
-                    $condition_selection = '';
-                    foreach (array_filter(explode(" ", $search), "non_vide") as $terme) {
-                        $condition_selection = $condition_selection . ' CONCAT('. $chercher_par .')
-                        LIKE "%' . substr($terme, 0, 5) . '%" OR ';
-                    };
-                    $condition_selection = "(" . substr($condition_selection, 0, -4) . ")";
-                    //Si l'on n'a aucun terme de recherche, alors on met "TRUE" comme condition
-                    //pour des questions de syntaxe.
-                    if ($condition_selection=="()") {
-                        $condition_selection = "TRUE";
-                    };
-                    if (array_key_exists("titre_contient", $_POST)) {
-                        $condition_selection = $condition_selection . ' AND (Titre LIKE "%' . $_POST["titre_contient"] . '%")';
-                        if ($_POST["titre_contient_pas"]!="") {
-                            $condition_selection = $condition_selection . ' AND (NOT Titre LIKE "%' . $_POST["titre_contient_pas"] . '%")';
-                        }
-                        $condition_selection = $condition_selection . ' AND (Resume LIKE "%' . $_POST["resume_contient"] . '%")';
-                        if ($_POST["resume_contient_pas"]!="") {
-                            $condition_selection = $condition_selection . ' AND (NOT Resume LIKE "%' . $_POST["resume_contient_pas"] . '%")';
-                        }
-                        if (is_numeric($_POST["nb_pages"])) {
-                            $condition_selection = $condition_selection . ' AND (Nbpages ' . $_POST["nb_pages_operateur"] . $_POST["nb_pages"] . ")";
-                        }
-                        if ($_POST["domaine"]!="Quelconque") {
-                            $condition_selection = $condition_selection . ' AND (Domaine = "' . $_POST["domaine"] . '")';
-                        }
-                        echo "<script type='text/javascript'>afficher_filtres('" . $_POST["titre_contient"] . "', '" . $_POST["titre_contient_pas"] . "', '" . $_POST["resume_contient"] . "', '" . $_POST["resume_contient_pas"] . "', '" . $_POST["nb_pages_operateur"] . "', '" . $_POST["nb_pages"] . "', '" . $_POST["domaine"] . "');</script>";
+
+                    echo "<div class='col-md-8'>
+                    <table class='table'>
+                    <thead>
+                    <tr>
+                    <th scope='col'>ISSN</th>
+                    <th scope='col'>Titre</th>
+                    <th scope='col'>Résumé</th>
+                    <th scope='col'>Nombre de pages</th>
+                    <th scope='col'>Domaine</th>
+                    <th scope='col'>Auteur(s)</th>
+                    </tr>
+                    </thead>
+                    <tbody>";
+
+                    $stmt_select->execute();
+
+                    while ($row = $stmt_select->fetch(PDO::FETCH_ASSOC)) {
+                        echo "<tr>
+                        <th scope='row'>{$row['ISSN']}</th>
+                        <td>{$row['Titre']}</td>
+                        <td>{$row['Resume']}</td>
+                        <td>{$row['Nbpages']}</td>
+                        <td>{$row['Domaine']}</td>
+                        <td>{$row['Auteurs']}</td>
+                        </tr>";
                     }
-                    $sql_select = $sql_select . $condition_selection . " GROUP BY ISSN";
+
+                    echo "</tbody>
+                    </table>
+                    </div>";
                 }
-            
-            $stmt_select = $pdo->prepare($sql_select);
-
-            echo "<table class='table'>
-            <thead>
-            <tr>
-            <th scope='col'>ISSN</th>
-            <th scope='col'>Titre</th>
-            <th scope='col'>Résumé</th>
-            <th scope='col'>Nombre de pages</th>
-            <th scope='col'>Domaine</th>
-            <th scope='col'>Auteur(s)</th>
-            </tr>
-            </thead>
-            <tbody>";
-
-            $stmt_select->execute();
-
-            while ($row = $stmt_select->fetch(PDO::FETCH_ASSOC)) {
-                echo "<tr>
-                <th scope='row'>{$row['ISSN']}</th>
-                <td>{$row['Titre']}</td>
-                <td>{$row['Resume']}</td>
-                <td>{$row['Nbpages']}</td>
-                <td>{$row['Domaine']}</td>
-                <td>{$row['Auteurs']}</td>
-                </tr>";
-            }
-
-            echo "</tbody>
-            </table>";
-        }
-        ?>
+                ?>
+            </div>
         </div>
     </form>
     </div>

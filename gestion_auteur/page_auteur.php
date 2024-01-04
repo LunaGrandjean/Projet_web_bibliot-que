@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
 
-  <link rel="stylesheet" href="styles.css" media="screen" type="text/css" />
+  <link rel="stylesheet" href="../styles.css" media="screen" type="text/css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
@@ -16,7 +16,7 @@
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
-    <a class="navbar-brand" href="page_admin.php">Dashboard administrateur</a>
+    <a class="navbar-brand" href="http://localhost/Projet_web_bibliotheque/administrateur/page_admin.php">Dashboard administrateur</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -26,10 +26,10 @@
           <a class="nav-link active" aria-current="page" href="#"></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="page_auteur.php">Auteur</a>
+          <a class="nav-link" href="http://localhost/Projet_web_bibliotheque/gestion_auteur/page_auteur.php">Auteur</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="page_livres.php">Livre</a>
+          <a class="nav-link" href="http://localhost/Projet_web_bibliotheque/gestion_livre/page_livres.php">Livre</a>
         </li>
       </ul>
       <ul class="navbar-nav ml-auto">
