@@ -2,9 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8">
-
-  <link rel="stylesheet" href="../styles.css" media="screen" type="text/css" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="styles.css" media="screen" type="text/css" />
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
@@ -16,7 +14,7 @@
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
-    <a class="navbar-brand" href="http://localhost/Projet_web_bibliotheque/administrateur/page_admin.php">Dashboard administrateur</a>
+    <a class="navbar-brand" href="page_admin.php">Dashboard administrateur</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -26,10 +24,10 @@
           <a class="nav-link active" aria-current="page" href="#"></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="http://localhost/Projet_web_bibliotheque/gestion_auteur/page_auteur.php">Auteur</a>
+          <a class="nav-link" href="page_auteur.php">Auteur</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="http://localhost/Projet_web_bibliotheque/gestion_livre/page_livres.php">Livre</a>
+          <a class="nav-link" href="page_livres.php">Livre</a>
         </li>
       </ul>
       <ul class="navbar-nav ml-auto">
@@ -58,7 +56,7 @@
     <li class="list-group-item">
   <a href="settings.php" class="text-decoration-none">
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear-fill" viewBox="0 0 16 16">
-      <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"/>
+      <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.820.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"/>
     </svg>
     Paramètres
   </a>
@@ -77,118 +75,92 @@
     </ul>
   </div>
 </div>
+
 <div class="container mt-4">
-  <div class="row">
-    <div class="col-md-4 mx-auto">
-      <h3>Répartition des nationalités des auteurs</h3>
-      <canvas id="nationaliteChart" width="450" height="200"></canvas>
+    <!-- Barre de recherche -->
+    <form class="mb-3" action="page_auteur.php" method="get">
+    <div class="input-group">
+      <input type="text" class="form-control" placeholder="Rechercher un auteur..." name="search">
+      <button class="btn btn-outline-secondary" type="submit">Rechercher</button>
     </div>
-    <div class="col-md-4 mx-auto">
-      <h3>Répartition des livres par domaine</h3>
-      <canvas id="livresParDomaineChart" width="450" height="200"></canvas>
-    </div>
-  </div>
+  </form>
   
-  <div class="row mt-4">
-    <div class="col-md-12 text-center">
-      <h3>Classement des auteurs ayant écrit le plus de livres</h3>
-      <canvas id="classementAuteursChart" width="500" height="200"></canvas>
-    </div>
-  </div>
+  <h2>Liste des auteurs</h2>
+
+  <?php
+  include('db.php');
+
+  try {
+    $dbh = new PDO("mysql:host=$host;dbname=$db_name;charset=utf8", $username, $password);
+    $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+  } catch (PDOException $e) {
+    die('Échec de la connexion à la base de données : ' . $e->getMessage());
+  }
+
+  // Requête SQL pour la recherche
+  $search = isset($_GET['search']) ? $_GET['search'] : '';
+  
+  // Condition pour afficher tous les auteurs par défaut
+  if (empty($search)) {
+    $sql_select = "SELECT * FROM auteur";
+    $stmt_select = $dbh->query($sql_select);
+  } else {
+    // Requête SQL pour la recherche
+    $sql_select = "SELECT * FROM auteur WHERE Nom LIKE :search OR Prenom LIKE :search";
+    $stmt_select = $dbh->prepare($sql_select);
+    $stmt_select->bindParam(':search', $search, PDO::PARAM_STR);
+    $stmt_select->execute();
+  }
+
+  echo "<table class='table'>";
+  echo "<thead>";
+  echo "<tr>";
+  echo "<th scope='col'>Nom</th>";
+  echo "<th scope='col'>Prénom</th>";
+  echo "<th scope='col'>Date de Naissance</th>";
+  echo "<th scope='col'>Nationalité</th>";
+  echo "<th scope='col'>Action</th>";
+  echo "</tr>";
+  echo "</thead>";
+  echo "<tbody>";
+
+  while ($row = $stmt_select->fetch(PDO::FETCH_ASSOC)) {
+    echo "<tr>";
+    echo "<td>{$row['Nom']}</td>";
+    echo "<td>{$row['Prenom']}</td>";
+    echo "<td>{$row['DateNaissance']}</td>";
+    echo "<td>{$row['Nationalite']}</td>";
+    echo "<td><a href='supprimer_auteur.php?Num={$row['Num']}' class='btn btn-link btn-sm' onclick='return confirm(\"Êtes-vous sûr de vouloir supprimer cet auteur ?\")'>Supprimer</a></td>";
+    echo "</tr>";
+  }
+
+  echo "</tbody>";
+  echo "</table>";
+  ?>
 </div>
 
-
-<script>
-fetch('graphs_auteurs.php')
-  .then(response => response.json())
-  .then(data => {
-    // Créer le graphique avec Chart.js
-    var ctx = document.getElementById('nationaliteChart').getContext('2d');
-    var nationaliteChart = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: Object.keys(data), // nationalités
-        datasets: [{
-          label: 'Nombre d\'auteurs',
-          data: Object.values(data), // nombre d'auteurs
-          backgroundColor: 'rgba(75, 192, 192, 0.2)',
-          borderColor: 'rgba(75, 192, 192, 1)',
-          borderWidth: 1
-        }]
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        }
-      }
-    });
-  });
-</script>
-
-<script>
-fetch('graphs_domaines.php')
-  .then(response => response.json())
-  .then(data => {
-    // Créer le graphique avec Chart.js
-    var ctx = document.getElementById('livresParDomaineChart').getContext('2d');
-    var livresParDomaineChart = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: Object.keys(data), // domaines
-        datasets: [{
-          label: 'Nombre de livres',
-          data: Object.values(data), // nombre de livres
-          backgroundColor: 'rgba(255, 99, 132, 0.2)',
-          borderColor: 'rgba(255, 99, 132, 1)',
-          borderWidth: 1
-        }]
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        }
-      }
-    });
-  });
-</script>
-
-<script>
-// Code JavaScript pour récupérer les données et afficher le graphique
-fetch('classement_auteurs.php')
-  .then(response => response.json())
-  .then(data => {
-    const auteurs = Object.keys(data);
-    const livres = Object.values(data);
-
-    const ctx = document.getElementById('classementAuteursChart').getContext('2d');
-    const myChart = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: auteurs,
-        datasets: [{
-          label: 'Nombre de livres',
-          data: livres,
-          backgroundColor: ['rgba(153, 102, 255, 0.2)'],
-          borderColor: ['rgba(153, 102, 255, 1)'],
-          borderWidth: 1
-        }]
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        }
-      }
-    });
-  })
-  .catch(error => console.error('Erreur lors de la récupération des données :', error));
-</script>
-
+<div class="container mt-4">
+    <h2>Ajouter un auteur</h2>
+    <form action="ajouter_auteur.php" method="post">
+        <div class="mb-3">
+            <label for="Nom" class="form-label">Nom :</label>
+            <input type="text" class="form-control" name="Nom" required>
+        </div>
+        <div class="mb-3">
+            <label for="Prenom" class="form-label">Prénom :</label>
+            <input type="text" class="form-control" name="Prenom" required>
+        </div>
+        <div class="mb-3">
+            <label for="DateNaissance" class="form-label">Date de naissance :</label>
+            <input type="date" class="form-control" name="DateNaissance" required>
+        </div>
+        <div class="mb-3">
+            <label for="Nationalite" class="form-label">Nationalité :</label>
+            <input type="text" class="form-control" name="Nationalite" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Ajouter l'auteur</button>
+    </form>
+</div>
 
 </body>
 </html>
