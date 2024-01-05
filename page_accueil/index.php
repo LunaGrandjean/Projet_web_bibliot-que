@@ -80,10 +80,6 @@
         <div id="resultats_livres">
         <?php
             include("../db.php");
-
-
-            // Requête SQL de base
-
             if (array_key_exists("search", $_POST)) {
                 $search = $_POST["search"];
                 $sql_select = "SELECT ISSN, Titre, Resume, Nbpages, Domaine, GROUP_CONCAT(CONCAT(Nom, ' ', Prenom) SEPARATOR ', ') AS Auteurs
@@ -147,105 +143,40 @@
                         echo "<script type='text/javascript'>afficher_filtres('" . $_POST["titre_contient"] . "', '" . $_POST["titre_contient_pas"] . "', '" . $_POST["resume_contient"] . "', '" . $_POST["resume_contient_pas"] . "', '" . $_POST["nb_pages_operateur"] . "', '" . $_POST["nb_pages"] . "', '" . $_POST["domaine"] . "');</script>";
                     }
                     $sql_select = $sql_select . $condition_selection . " GROUP BY ISSN";
+                
+                $stmt_select = $pdo->prepare($sql_select);
+
+                echo "<table class='table'>
+                <thead>
+                <tr>
+                <th scope='col'>ISSN</th>
+                <th scope='col'>Titre</th>
+                <th scope='col'>Résumé</th>
+                <th scope='col'>Nombre de pages</th>
+                <th scope='col'>Domaine</th>
+                <th scope='col'>Auteur(s)</th>
+                </tr>
+                </thead>
+                <tbody>";
+
+                $stmt_select->execute();
+
+                while ($row = $stmt_select->fetch(PDO::FETCH_ASSOC)) {
+                    echo "<tr>
+                    <th scope='row'>{$row['ISSN']}</th>
+                    <td>{$row['Titre']}</td>
+                    <td>{$row['Resume']}</td>
+                    <td>{$row['Nbpages']}</td>
+                    <td>{$row['Domaine']}</td>
+                    <td>{$row['Auteurs']}</td>
+                    </tr>";
                 }
-            
-            $stmt_select = $pdo->prepare($sql_select);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            echo "<table class='table'>
-            <thead>
-            <tr>
-            <th scope='col'>ISSN</th>
-            <th scope='col'>Titre</th>
-            <th scope='col'>Résumé</th>
-            <th scope='col'>Nombre de pages</th>
-            <th scope='col'>Domaine</th>
-            <th scope='col'>Auteur(s)</th>
-            </tr>
-            </thead>
-            <tbody>";
-
-            $stmt_select->execute();
-
-
-
-
-
-
-
-
-
-
-
-
-
-            while ($row = $stmt_select->fetch(PDO::FETCH_ASSOC)) {
-                echo "<tr>
-                <th scope='row'>{$row['ISSN']}</th>
-                <td>{$row['Titre']}</td>
-                <td>{$row['Resume']}</td>
-                <td>{$row['Nbpages']}</td>
-                <td>{$row['Domaine']}</td>
-                <td>{$row['Auteurs']}</td>
-                </tr>";
+                echo "</tbody>
+                </table>";
             }
-
-            echo "</tbody>
-            </table>";
         }
         ?>
-
-
-
-
-
-
-
-
-
-
-
-
-
         </div>
     </form>
     </div>
