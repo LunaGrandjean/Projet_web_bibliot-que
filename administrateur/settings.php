@@ -155,22 +155,19 @@
         <button type="submit" class="submit">Changer le mot de passe</button>
     </form>
 </div>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const passwordInputs = document.querySelectorAll('input[type="password"]');
-        const eyeIcons = document.querySelectorAll('.eye-icon');
-
-        eyeIcons.forEach((icon, index) => {
-            icon.addEventListener('click', function () {
-                // Toggle the password input type between "password" and "text"
-                if (passwordInputs[index].type === 'password') {
-                    passwordInputs[index].type = 'text';
-                } else {
-                    passwordInputs[index].type = 'password';
-                }
-            });
-        });
-    });
-</script>
+<?php
+    include("../db.php");
+    if (isset($_POST["username"]) and isset($_POST["password"]) and isset($_POST["new_password"])) {
+        $username = $_POST["username"];
+        $password = $_POST["password"];
+        $new_password = $_POST["new_password"];
+        $sql_update = "UPDATE administrateur
+        SET Password = '$new_password'
+        WHERE Nom = '$username' AND Password = '$password'";
+        $stmt_update = $pdo->prepare($sql_update);
+        $stmt_update->execute();
+        $pdo = null;
+    }
+?>
 </body>
 </html>
