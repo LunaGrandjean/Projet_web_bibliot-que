@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : mar. 19 déc. 2023 à 14:26
+-- Généré le : sam. 06 jan. 2024 à 14:34
 -- Version du serveur : 10.4.32-MariaDB
 -- Version de PHP : 8.2.12
 
@@ -24,10 +24,10 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Structure de la table `admin`
+-- Structure de la table `administrateur`
 --
 
-CREATE TABLE `admin` (
+CREATE TABLE `administrateur` (
   `Id` int(11) NOT NULL,
   `Nom` varchar(255) DEFAULT NULL,
   `Prenom` varchar(255) DEFAULT NULL,
@@ -37,10 +37,10 @@ CREATE TABLE `admin` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Déchargement des données de la table `admin`
+-- Déchargement des données de la table `administrateur`
 --
 
-INSERT INTO `admin` (`Id`, `Nom`, `Prenom`, `Mail`, `Password`, `Tel`) VALUES
+INSERT INTO `administrateur` (`Id`, `Nom`, `Prenom`, `Mail`, `Password`, `Tel`) VALUES
 (1, 'Admin1', 'John', 'admin1@example.com', 'admin123', '123-456-7890'),
 (2, 'Admin2', 'Jane', 'admin2@example.com', 'admin456', '987-654-3210');
 
@@ -94,9 +94,7 @@ INSERT INTO `ecrit` (`Id`, `Auteur_Num`, `Livre_ISSN`) VALUES
 (6, 1, 6),
 (7, 2, 6),
 (8, 4, 10),
-(9, 5, 11),
-(10, 3, 12),
-(11, 1, 12);
+(9, 5, 11);
 
 -- --------------------------------------------------------
 
@@ -117,27 +115,23 @@ CREATE TABLE `livre` (
 --
 
 INSERT INTO `livre` (`ISSN`, `Titre`, `Resume`, `Nbpages`, `Domaine`) VALUES
-(1, 'Harry Potter and the Philosopher\'s Stone', 'A young wizard\'s journey at Hogwarts.', 332, 'Fantasy'),
+(1, "Harry Potter and the Philosopher\'s Stone", "A young wizard\'s journey at Hogwarts.", 332, 'Fantasy'),
 (2, 'The Lord of the Rings', 'Epic fantasy adventure in Middle-earth.', 1178, 'Fantasy'),
 (3, 'A Game of Thrones', 'Political intrigue in the Seven Kingdoms.', 694, 'Fantasy'),
-(4, 'The Handmaid\'s Tale', 'Dystopian novel exploring gender roles.', 311, 'Dystopia'),
+(4, "The Handmaid\'s Tale", 'Dystopian novel exploring gender roles.', 311, 'Dystopia'),
 (5, 'The Shining', 'Psychological horror in an isolated hotel.', 447, 'Horror'),
 (6, 'The Magical Fellowship', 'A collaboration between Rowling and Tolkien.', 500, 'Fantasy'),
-(7, 'Harry Potter and the Chamber of Secrets', 'The second book in the Harry Potter series.', 384, 'Fantasy'),
-(8, 'The Hobbit', 'Bilbo\'s adventure in Middle-earth.', 310, 'Fantasy'),
-(9, 'A Clash of Kings', 'Continuation of the A Song of Ice and Fire series.', 768, 'Fantasy'),
-(10, 'The Testaments', 'Sequel to The Handmaid\'s Tale.', 432, 'Dystopia'),
-(11, 'It', 'A group of friends battles an evil entity in their hometown.', 1138, 'Horror'),
-(12, 'Wizards and Thrones', 'Collaboration between Martin and Rowling.', 600, 'Fantasy');
+(7, 'The Testaments', "Sequel to The Handmaid\'s Tale.", 432, 'Dystopia'),
+(8, 'It', 'A group of friends battles an evil entity in their hometown.', 1138, 'Horror');
 
 --
 -- Index pour les tables déchargées
 --
 
 --
--- Index pour la table `admin`
+-- Index pour la table `administrateur`
 --
-ALTER TABLE `admin`
+ALTER TABLE `administrateur`
   ADD PRIMARY KEY (`Id`);
 
 --
@@ -165,9 +159,9 @@ ALTER TABLE `livre`
 --
 
 --
--- AUTO_INCREMENT pour la table `admin`
+-- AUTO_INCREMENT pour la table `administrateur`
 --
-ALTER TABLE `admin`
+ALTER TABLE `administrateur`
   MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
@@ -186,7 +180,7 @@ ALTER TABLE `ecrit`
 -- AUTO_INCREMENT pour la table `livre`
 --
 ALTER TABLE `livre`
-  MODIFY `ISSN` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `ISSN` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- Contraintes pour les tables déchargées
