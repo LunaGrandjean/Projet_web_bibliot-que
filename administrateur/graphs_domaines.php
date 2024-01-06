@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("db.php");
+include("../db.php");
 
 // Indiquer que le contenu est du type JSON
 header('Content-Type: application/json');
