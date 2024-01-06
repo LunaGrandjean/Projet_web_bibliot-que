@@ -65,7 +65,7 @@ if (isset($_SESSION['error_message'])) {
 <style>
     body {
   font-family: 'Open Sans', Helvetica, Arial, sans-serif;
-  background: url('../../livre-bibliotheque.jpg') center center/cover no-repeat;
+  background: url('../livre-bibliotheque.jpg') center center/cover no-repeat;
   background-attachment: fixed;
   background-size: cover;
   margin: 0;
