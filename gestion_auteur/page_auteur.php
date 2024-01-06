@@ -87,7 +87,7 @@
   <h2>Liste des auteurs</h2>
 
   <?php
-  include('db.php');
+  include('../db.php');
 
   try {
     $dbh = new PDO("mysql:host=$host;dbname=$db_name;charset=utf8", $username, $password);
