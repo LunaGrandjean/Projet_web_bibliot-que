@@ -14,7 +14,7 @@
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
-    <a class="navbar-brand" href="page_admin.php">Dashboard administrateur</a>
+    <a class="navbar-brand" href="../administrateur/page_admin.php">Dashboard administrateur</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -24,16 +24,15 @@
           <a class="nav-link active" aria-current="page" href="#"></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="page_auteur.php">Auteur</a>
+          <a class="nav-link" href="../gestion_auteur/page_auteur.php">Auteur</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="page_livres.php">Livre</a>
+          <a class="nav-link" href="../gestion_livre/page_livres.php">Livre</a>
         </li>
       </ul>
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
           <a class="nav-link" href="#" data-bs-toggle="offcanvas" data-bs-target="#profileMenu" aria-controls="profileMenu">
-            <!-- Utilisez l'icône SVG ici -->
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
               <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
               <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
