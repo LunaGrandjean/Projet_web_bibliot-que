@@ -185,6 +185,7 @@
 
                 echo "</tbody>
                 </table>";
+                $pdo = null;
             }
         }
         ?>
