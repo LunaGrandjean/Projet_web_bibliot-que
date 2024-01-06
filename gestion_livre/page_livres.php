@@ -174,6 +174,7 @@
             </div>
 
 
+            <br/>
             <h2>Ajouter un livre</h2>
             <form action="ajouter_livres.php" method="post">
                 <div class="mb-3">

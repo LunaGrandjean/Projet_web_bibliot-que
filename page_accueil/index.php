@@ -31,6 +31,9 @@
                 }
                 else {
                     echo '<div class="recherche"><input type="text" name="search" placeholder="Chercher un livre..."/><button type="submit">Chercher</button></div>';
+                    //Si l'on n'a pas encore effectué de recherche, alors les "radiobuttons"
+                    //correspondant à toutes les caractéristiques (titre, résumé, domaine, auteur)
+                    //selon lesquelles on peut chercher un livre doivent tous être cochés
                     $chercher_par_titre = $chercher_par_resume = $chercher_par_domaine = $chercher_par_auteur = true;
                 }
                 $titre_checked = $resume_checked = $domaine_checked = $auteur_checked = "";
