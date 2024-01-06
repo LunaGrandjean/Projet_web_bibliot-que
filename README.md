@@ -4,7 +4,8 @@ Le but de ce projet est de créer un site web qui permettra aux utilisateurs de 
 
 ## Scéma UML de notre base de données:
 
-![image](https://github.com/LunaGrandjean/Projet_web_biblioteque/assets/125506491/a72d6117-f33e-4391-b6e5-e652c0503cc6)
+![image](https://github.com/LunaGrandjean/Projet_web_bibliotheque/assets/125506491/5da8b1b3-b200-4327-90b2-ca8a863cd6a8)
+
 
 ## Répartition des taches : 
 * Maia : Base de données, Jointure PHP <-> Database​
