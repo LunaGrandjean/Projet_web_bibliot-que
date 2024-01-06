@@ -5,7 +5,7 @@
     <style>
     body {
             font-family: 'Open Sans', Helvetica, Arial, sans-serif;
-            background: url('https://img.freepik.com/photos-gratuite/livre-bibliotheque-manuel-ouvert_1150-5920.jpg?w=996&t=st=1703410471~exp=1703411071~hmac=305de36c132b35094fd8ea3d11053157017153be7a743dcdb8620cfd71267f78') center center/cover no-repeat;
+            background: url('../livre-bibliotheque.jpg') center center/cover no-repeat;
             background-attachment: fixed;
             background-size: cover;
             margin: 0;
