@@ -161,11 +161,26 @@
         $username = $_POST["username"];
         $password = $_POST["password"];
         $new_password = $_POST["new_password"];
+        $sql_select = "SELECT * FROM administrateur WHERE Nom = '$username' AND Password = '$password'";
+        $stmt_select = $pdo->prepare($sql_select);
+        $stmt_select->execute();
         $sql_update = "UPDATE administrateur
         SET Password = '$new_password'
         WHERE Nom = '$username' AND Password = '$password'";
         $stmt_update = $pdo->prepare($sql_update);
         $stmt_update->execute();
+        //Si la requête SELECT a renvoyé au moins un enregistrement, alors on considère que
+        //le changement de mot de passe a eu lieu avec succès. Sinon, on considère que ce n'est pas le cas
+        if ($stmt_select->fetch(PDO::FETCH_ASSOC)) {
+            echo "<script>
+            alert('Le changement de mot de passe a été effectué avec succès !');
+            </script>";
+        }
+        else {
+            echo "<script>
+            alert(`Le changement de mot de passe n'a pas pu être effectué car aucun compte ne correspond aux données saisies.`);
+            </script>";
+        }
         $pdo = null;
     }
 ?>
