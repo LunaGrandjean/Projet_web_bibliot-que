@@ -151,7 +151,12 @@
                     echo "<tbody>";
 
                     // Bind the parameter only once
-                    $search = '%' . $_POST['search'] . '%';
+                    if (isset($_POST['search'])) {
+                        $search = '%' . $_POST['search'] . '%';
+                    }
+                    else {
+                        $search = "%%";
+                    }
                     $stmt_select->bindParam(':search', $search, PDO::PARAM_STR);
                     $stmt_select->execute();
 
