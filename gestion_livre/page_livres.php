@@ -95,17 +95,7 @@
             <h2>Liste des livres</h2> 
             <div class='livres-container'> 
                 <?php
-                    $host = 'localhost';
-                    $db_name = 'projetweb';
-                    $username = 'root';
-                    $password = '';
-
-                    try {
-                        $dbh = new PDO("mysql:host=$host;dbname=$db_name;charset=utf8", $username, $password);
-                        $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                    } catch (PDOException $e) {
-                        die('Échec de la connexion à la base de données : ' . $e->getMessage());
-                    }
+                    include("../db.php");
 
                     // Requête SQL de base
                     $sql_select = "SELECT livre.ISSN, Titre, Resume, Nbpages, Domaine, GROUP_CONCAT(CONCAT(Nom, ' ', Prenom) SEPARATOR ', ') AS Auteurs
@@ -133,7 +123,7 @@
                             GROUP BY livre.ISSN";
                     }
 
-                    $stmt_select = $dbh->prepare($sql_select);
+                    $stmt_select = $pdo->prepare($sql_select);
 
                     echo "<form action='supprimer_livres.php' method='post'>";
                     echo "<table class='table'>";
@@ -179,7 +169,7 @@
                     echo "</table>";
                     echo "</form>";
 
-                    $dbh = null;
+                    $pdo = null;
                 ?>
             </div>
 
@@ -209,21 +199,11 @@
                 <div class="mb-3">
                     <label for="Auteur" class="form-label" name="Auteur">Auteur :</label>
                         <?php
-                            $host = 'localhost';
-                            $db_name = 'projetweb';
-                            $username = 'root';
-                            $password = '';
-                    
-                            try {
-                                $dbh = new PDO("mysql:host=$host;dbname=$db_name;charset=utf8", $username, $password);
-                                $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                            } catch (PDOException $e) {
-                                die('Échec de la connexion à la base de données : ' . $e->getMessage());
-                            }
+                            include("../db.php");
                     
                             // Récupération des auteurs depuis la base de données
                             $sqlAuteurs = "SELECT * FROM auteur";
-                            $stmtAuteurs = $dbh->query($sqlAuteurs);
+                            $stmtAuteurs = $pdo->query($sqlAuteurs);
                             
                             // Affichage des cases à cocher pour chaque auteur
                             while ($auteur = $stmtAuteurs->fetch(PDO::FETCH_ASSOC)) {
@@ -241,6 +221,7 @@
                                     echo "<li>{$selectedAuteur}</li>";
                                 }
                                 echo "</ul>";
+                            $pdo = null;
                             }
                         ?>
                     <br>
